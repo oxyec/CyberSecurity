@@ -1,11 +1,46 @@
 <!-- templates/accounts/login.html -->
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+{% load static tailwind_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% tailwind_css %}
+</head>
+<body class="bg-[url(https://www.ieu.edu.tr/images/kampus35.jpg)]">
 
-{% if form.errors %}
-  <p style="color: red;">Login failed. Please try again.</p>
-{% endif %}
+<div class="login-container">
+  
+  <form method="post" class="max-w-md mx-auto mt-8 p-6 bg-gray-700 rounded-lg shadow-xl">
+    <div class="bg-gray-800">
+      <h2 class="text-white text-2xl">İzmir Ekonomi Üniversitesi Siber Güvenlik Kulubü</h2>
+    </div>
+    {% csrf_token %}
+    <div class="mb-4">
+      <label class="block text-gray-300 text-sm font-bold mb-2" for="{{ form.username.id_for_label }}">
+        Kullanıcı Adı
+      </label>
+      <div class="border-2 border-white">
+      {{ form.username }}
+      </div>
+    </div>
+    <div class="mb-6">
+      <label class="block text-gray-300 text-sm font-bold mb-2" for="{{ form.password.id_for_label }}">
+        E-posta
+      </label>
+      <div class="border-2 border-white">
+      {{ form.password }}
+      </div
+    </div>
+    <div class="flex items-center justify-between">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        Giriş Yap
+      </button>
+      
+    </div>
+  </form>
+
+  {% if form.errors %}
+    <p class="error-message">Login failed. Please try again.</p>
+  {% endif %}
+</div>
