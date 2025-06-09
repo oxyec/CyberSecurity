@@ -1,5 +1,5 @@
 """
-URL configuration for websitebackend project.
+URL configuration for backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -15,20 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
-from django.contrib.auth import views as auth_views
-from django.http import HttpResponse
-
-from blog.views import blog_list
-
-def home_view(_):
-    return HttpResponse("Ana sayfaya hoşgeldiniz!")
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(template_name='accounts/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('blog_list/', blog_list , name='logout'),
-    path('', home_view, name='home'),
-    path("__reload__/", include("django_browser_reload.urls")),
+    path('blog/', include('blog.urls')),  # Bunu ekle
 ]
