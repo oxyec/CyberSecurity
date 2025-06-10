@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts',  # Your custom user
     'blog',      # Blog application
     'websitebackend',  # For live reloading during development
+     'widget_tweaks',
 ]
 
 MIDDLEWARE = [
