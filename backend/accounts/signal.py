@@ -8,3 +8,8 @@ def create_user_profile_and_settings(_sender, instance, created, **_kwargs):
         UserProfile.objects.create(user=instance)
         UserSettings.objects.create(user=instance)
 
+@receiver(post_save, sender=CustomUser)
+def save_user_profile_and_settings(_sender, instance, **_kwargs):
+    instance.profile.save()
+    instance.usersettings.save()
+
