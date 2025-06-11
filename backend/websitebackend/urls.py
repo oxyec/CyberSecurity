@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponse
 
 from blog.views import blog_list
+from accounts.views import main
 
 def home_view(_):
     return HttpResponse("Ana sayfaya hoşgeldiniz!")
@@ -31,6 +32,7 @@ urlpatterns = [
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/passwordreset.html'), name='password_reset'),
     #path("accounts/", include("django.contrib.auth.urls")),
     path('blog_list/', blog_list , name='logout'),
+    path('main/', main , name='logout'),
     path('', home_view, name='home'),
     path("__reload__/", include("django_browser_reload.urls")),
 ]

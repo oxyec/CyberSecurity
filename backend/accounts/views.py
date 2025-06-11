@@ -7,3 +7,6 @@ class CustomLoginView(LoginView):
 
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'accounts/passwordreset.html'
+
+def main(request):
+    return render(request, 'main/navbar.html', {})
