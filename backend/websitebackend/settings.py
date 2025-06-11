@@ -31,23 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'accounts', 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'blog',  # Blog application
-    'tailwind',
-    'theme',  # Tailwind theme app
-    'django_browser_reload',  # For live reloading during development
-    'widget_tweaks',  # For form styling
+    'account.apps.AccountConfig',
 ]
-
-TAILWIND_APP_NAME = 'theme'
-
-NPM_BIN_PATH = 'C:/Program Files/nodejs/npm.cmd'  # Adjust this path if necessary
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,7 +48,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'websitebackend.urls'
@@ -65,7 +55,7 @@ ROOT_URLCONF = 'websitebackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,10 +100,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -138,7 +124,7 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'accounts.CustomUser'  # Eğer app isminiz 'accounts' ise
+AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'accounts' ise
 
 import os
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -156,4 +142,4 @@ if os.environ.get("ENV") == "TEST":
             'PORT': os.environ.get('DATABASE_PORT'),
         }
     }
-AUTH_USER_MODEL = 'accounts.CustomUser'  # Eğer app isminiz 'accounts' ise
+AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'accounts' ise
