@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib import admin
 
 # ------------------------------
-# MODELLER
+# MODELS
 # ------------------------------
 
 class CustomUser(AbstractUser):
@@ -27,25 +27,29 @@ class UserSettings(models.Model):
     receive_newsletter = models.BooleanField(default=False)
     dark_mode = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"Settings for {self.user.username}"
+
 class UserActivity(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     last_login = models.DateTimeField(null=True, blank=True)
     last_activity = models.DateTimeField(null=True, blank=True)
 
 # ------------------------------
-# ADMİN KAYITLARI
+# ADMIN RECORDS
 # ------------------------------
-
+@admin.register(CustomUser)
+class CustomUserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'student_id', 'github_handle', 'created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
+    search_fields = ('username', 'email', 'student_id', 'github_handle')
 @admin.register(UserSettings)
 class UserSettingsAdmin(admin.ModelAdmin):
     readonly_fields = ()
     list_display = ('user', 'receive_newsletter', 'dark_mode')
     list_filter = ('receive_newsletter', 'dark_mode')
-
-@admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'student_id', 'github_handle', 'created_at', 'updated_at')
-    readonly_fields = ('created_at', 'updated_at')
+def __str__(self):
+    return f"Profile of {self.user.username}"
 
 @admin.register(UserActivity)
 class UserActivityAdmin(admin.ModelAdmin):
@@ -53,3 +57,8 @@ class UserActivityAdmin(admin.ModelAdmin):
     readonly_fields = ('last_login', 'last_activity')
     list_filter = ('last_login', 'last_activity')
     search_fields = ('user__username', 'user__email')
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'location', 'website', 'created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')

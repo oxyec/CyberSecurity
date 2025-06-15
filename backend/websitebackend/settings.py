@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)l8&h)is*v)5dt7cyc@+q87wdiy08kbp#2uey+wrp9c-2!%*1!'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,8 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account.apps.AccountConfig',
-    'blog.models.models.Post',
+    
+    'blog',
+    'account',  # Custom user app
+    'websitebackend',  # For live reloading during development
+    'widget_tweaks',  # For form tweaks in templates
 ]
 
 MIDDLEWARE = [
@@ -100,6 +104,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+]
 
 
 # Internationalization
@@ -125,13 +135,12 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'accounts' ise
+AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'account' ise
 
-import os
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static')),
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 if os.environ.get("ENV") == "TEST":
     DATABASES = {
         'default': {
@@ -143,4 +152,13 @@ if os.environ.get("ENV") == "TEST":
             'PORT': os.environ.get('DATABASE_PORT'),
         }
     }
-AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'accounts' ise
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+# Clickjacking protection
+# CSRF protection   

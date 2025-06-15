@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponse
 
 from blog.views import blog_list
-from accounts.views import main
+from account.views import main
 
 def home_view(_):
     return HttpResponse("Ana sayfaya hoşgeldiniz!")

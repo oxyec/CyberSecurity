@@ -1,6 +1,11 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+
+def main(request):
+    return HttpResponse("Hello from main view!")
+
 
 class CustomLoginView(LoginView):
     template_name = 'account/login.html'
