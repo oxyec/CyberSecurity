@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'account',
+    'blog.models.models.Post',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',      # Blog application
     'websitebackend',  # For live reloading during development
-     'widget_tweaks',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
