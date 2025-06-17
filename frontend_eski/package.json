@@ -1,4 +1,9 @@
 {
+  "name": "cybersecurity-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the CyberSecurity project",
+  "author": "",
+  "license": "MIT",
   "type": "module",
   "devDependencies": {
     "dotenv": "^16.5.0",
@@ -7,9 +12,11 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "node server.js"
+    "start": "node server.js",
+    "clean": "rm -rf dist coverage",
+    "prepare": ""
   },
-  "dependencies": {
-    "express": "^5.1.0"
+  "jest": {
+    "testEnvironment": "node"
   }
 }
