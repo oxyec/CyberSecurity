@@ -20,15 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8bjusyvfc*+!vq@(w$fr(^3@hn40%kc$r&%wh1n7h!ksm$gbx$'
+from django.core.management.utils import get_random_secret_key
+import os
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # Add your domain here if deploying to production
 
 
 # Application definition
+AUTH_USER_MODEL = 'account.CustomUser'
 
 INSTALLED_APPS = [
     'account',
@@ -40,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',      # Blog application
     'websitebackend',  # For live reloading during development
-     'widget_tweaks',
+    'widget_tweaks',
+    'websitebackend.account',  # Custom user app
 ]
 
 MIDDLEWARE = [
@@ -114,3 +118,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SECURE_SSL_REDIRECT = True  # HTTP isteklerini HTTPS’ye yönlendir
+SESSION_COOKIE_SECURE = True  # Sadece HTTPS için session cookie
+CSRF_COOKIE_SECURE = True     # Sadece HTTPS için CSRF cookie
+SECURE_HSTS_SECONDS = 31536000  # 1 yıl boyunca HSTS uygula
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'  # Clickjacking engelleme

@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)l8&h)is*v)5dt7cyc@+q87wdiy08kbp#2uey+wrp9c-2!%*1!'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,25 +30,19 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+AUTH_USER_MODEL = 'account.CustomUser'
 INSTALLED_APPS = [
-    'accounts',  #account olayını yapınca yazılır
+    'account',  # Custom user app
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',  # Blog application
-    'tailwind',
-    'theme',  # Tailwind theme app
-    'django_browser_reload',  # For live reloading during development
-    'widget_tweaks',  # For form styling
+    'blog',
+    'websitebackend',  # For live reloading during development
+    'widget_tweaks',  # For form tweaks in templates
 ]
-
-TAILWIND_APP_NAME = 'theme'
-
-NPM_BIN_PATH = 'C:/Program Files/nodejs/npm.cmd'  # Adjust this path if necessary
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -57,7 +52,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = 'websitebackend.urls'
@@ -65,7 +59,7 @@ ROOT_URLCONF = 'websitebackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -109,9 +103,11 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-INTERNAL_IPS = [
-    "127.0.0.1",
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
 
 
@@ -130,16 +126,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'accounts.CustomUser'  #bunu da değiştirecem
+AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'account' ise
 
-import os
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 if os.environ.get("ENV") == "TEST":
     DATABASES = {
         'default': {
@@ -151,4 +151,13 @@ if os.environ.get("ENV") == "TEST":
             'PORT': os.environ.get('DATABASE_PORT'),
         }
     }
-AUTH_USER_MODEL = 'accounts.CustomUser'  #ve bunu da
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+# Clickjacking protection
+# CSRF protection   
