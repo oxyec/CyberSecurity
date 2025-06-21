@@ -13,9 +13,11 @@ def post_create(request):
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
-            post.author = request.user  # Giriş yapan kullanıcıyı yazar olarak kaydet
+            post.author = request.user  
             post.save()
+            posts = Post.objects.all().order_by('-created_at')
             return redirect('blog_list')
+
     else:
         form = PostForm()
-    return render(request, 'blog/post_form.html', {'form': form})
+    return render(request, 'blog/blog_create.html', {'form': form})
