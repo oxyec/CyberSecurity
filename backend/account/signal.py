@@ -3,13 +3,13 @@ from django.dispatch import receiver
 from .models import CustomUser, UserProfile, UserSettings
 
 @receiver(post_save, sender=CustomUser)
-def create_user_profile_and_settings(_sender, instance, created, **_kwargs):
+def create_user_profile_and_settings(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
         UserSettings.objects.create(user=instance)
 
 @receiver(post_save, sender=CustomUser)
-def save_user_profile_and_settings(_sender, instance, **_kwargs):
+def save_user_profile_and_settings(sender, instance, **kwargs):
     instance.profile.save()
     instance.usersettings.save()
 
