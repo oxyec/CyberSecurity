@@ -26,12 +26,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+
 
 
 # Application definition
-AUTH_USER_MODEL = 'account.CustomUser'
 INSTALLED_APPS = [
+    'sslserver',
     'account',  # Custom user app
     'django.contrib.admin',
     'django.contrib.auth',
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'websitebackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Directory for custom templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

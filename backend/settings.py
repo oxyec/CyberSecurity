@@ -25,15 +25,15 @@ import os
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # Add your domain here if deploying to production
 
 
 # Application definition
-AUTH_USER_MODEL = 'account.CustomUser'
 
 INSTALLED_APPS = [
+    'sslserver',
     'account',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'blog',      # Blog application
     'websitebackend',  # For live reloading during development
     'widget_tweaks',
-    'websitebackend.account',  # Custom user app
 ]
 
 MIDDLEWARE = [
@@ -62,7 +61,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Directory for custom templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
