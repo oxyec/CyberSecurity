@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # Add your domain here if deploying t
 
 
 # Application definition
+AUTH_USER_MODEL = 'account.CustomUser'
 
 INSTALLED_APPS = [
     'account',

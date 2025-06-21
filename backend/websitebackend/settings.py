@@ -30,8 +30,9 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+AUTH_USER_MODEL = 'account.CustomUser'
 INSTALLED_APPS = [
+    'account',  # Custom user app
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'account',  # Custom user app
     'websitebackend',  # For live reloading during development
     'widget_tweaks',  # For form tweaks in templates
 ]
