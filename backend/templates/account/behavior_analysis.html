@@ -1,0 +1,23 @@
+<h2>Davranış Analizi</h2>
+
+<p>Şu anki saat: {{ current_hour }}. Alışılmış saat: {{ typical_hour }}</p>
+
+{% if unusual_time %}
+    <p style="color: red;">⚠️ Bu giriş alışılmış saatlerin dışında olabilir.</p>
+{% else %}
+    <p style="color: green;">✅ Giriş zamanı beklenen zaman aralığında.</p>
+{% endif %}
+
+<h3>En Sık Giriş Yapılan Saatler</h3>
+<ul>
+  {% for hour in login_hours %}
+    <li>{{ hour.hour }}:00 - {{ hour.count }} kez</li>
+  {% endfor %}
+</ul>
+
+<h3>En Sık Kullanılan IP'ler</h3>
+<ul>
+  {% for ip in top_ips %}
+    <li>{{ ip.ip_address }} - {{ ip.count }} kez</li>
+  {% endfor %}
+</ul>
