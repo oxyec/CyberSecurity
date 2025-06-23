@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'blog',      # Blog application
     'websitebackend',  # For live reloading during development
     'widget_tweaks',
+    'tailwind', 
+    'theme', # For live reloading during development
 ]
 
 MIDDLEWARE = [
@@ -73,7 +75,11 @@ TEMPLATES = [
     },
 ]
 
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
 WSGI_APPLICATION = 'backend.wsgi.application'
+
+TAILWIND_APP_NAME = 'theme'
 
 
 # Database

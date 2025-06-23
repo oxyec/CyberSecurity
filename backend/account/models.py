@@ -21,7 +21,6 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
 class UserSettings(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     receive_newsletter = models.BooleanField(default=False)
@@ -35,6 +34,17 @@ class UserActivity(models.Model):
     last_login = models.DateTimeField(null=True, blank=True)
     last_activity = models.DateTimeField(null=True, blank=True)
 
+# Yeni model: Şüpheli login girişlerini izlemek için
+class LoginAttempt(models.Model):
+    ip_address = models.GenericIPAddressField()
+    username = models.CharField(max_length=150, blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    successful = models.BooleanField(default=False)
+
+    def __str__(self):
+        status = "Başarılı" if self.successful else "Başarısız"
+        return f"{self.timestamp} - {self.username or 'Bilinmeyen'} ({self.ip_address}) → {status}"
+
 # ------------------------------
 # ADMIN RECORDS
 # ------------------------------
@@ -43,11 +53,13 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'student_id', 'github_handle', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
     search_fields = ('username', 'email', 'student_id', 'github_handle')
+
 @admin.register(UserSettings)
 class UserSettingsAdmin(admin.ModelAdmin):
     readonly_fields = ()
     list_display = ('user', 'receive_newsletter', 'dark_mode')
     list_filter = ('receive_newsletter', 'dark_mode')
+
 def __str__(self):
     return f"Profile of {self.user.username}"
 
@@ -62,3 +74,10 @@ class UserActivityAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'location', 'website', 'created_at', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
+
+# LoginAttempt modeli admin paneline de ekleyelim:
+@admin.register(LoginAttempt)
+class LoginAttemptAdmin(admin.ModelAdmin):
+    list_display = ('ip_address', 'username', 'timestamp', 'successful')
+    list_filter = ('successful', 'timestamp')
+    search_fields = ('username', 'ip_address')

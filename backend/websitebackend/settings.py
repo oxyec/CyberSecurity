@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'websitebackend',  # For live reloading during development
-    'widget_tweaks',  # For form tweaks in templates
+    'websitebackend', 
+    'tailwind', # For live reloading during development
+    'widget_tweaks', 
+    'theme', # For form tweaks in templates
 ]
 
 MIDDLEWARE = [
@@ -86,6 +88,8 @@ DATABASES = {
     }
 }
 
+TAILWIND_APP_NAME = 'theme'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -110,6 +114,8 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
+
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 
 
 # Internationalization
