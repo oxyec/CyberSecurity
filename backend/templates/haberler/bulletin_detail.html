@@ -1,0 +1,7 @@
+<h1>{{ bulletin.title }}</h1>
+
+<p>{{ bulletin.content|linebreaks }}</p>
+
+<small>Yayınlanma Tarihi: {{ bulletin.published_at|date:"d M Y H:i" }}</small>
+
+<p><a href="{% url 'bulletin_list' %}">← Tüm Haberlere Geri Dön</a></p>

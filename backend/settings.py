@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1'] # Add your domain here if deploying t
 # Application definition
 
 INSTALLED_APPS = [
+    'haberler',
     'sslserver',
     'account',
     'django.contrib.admin',
