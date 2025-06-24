@@ -80,8 +80,9 @@ NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 TAILWIND_APP_NAME = 'theme'
-
-
+AUTH_USER_MODEL = 'account.CustomUser'  # Eğer app isminiz 'account' ise
+#LOGIN_REDIRECT_URL = '/blog_list/'
+#LOGOUT_REDIRECT_URL = '/login/'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 

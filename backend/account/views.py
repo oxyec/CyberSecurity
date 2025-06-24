@@ -6,6 +6,8 @@ from django.core.cache import cache
 from django.http import HttpResponse
 from django.utils.timezone import now
 from django.db.models import Count
+from django.db.models.functions import ExtractHour
+from django.utils import timezone
 import time
 
 from account.models import LoginAttempt  # Bu model daha önce eklendiğini varsayıyoruz
@@ -24,7 +26,7 @@ class CustomLoginView(LoginView):
         LoginAttempt.objects.create(
             username=form.cleaned_data.get('username'),
             ip_address=ip,
-            successful=True,  # düzeltme: modelde 'was_successful' değil 'successful' vardı
+            successful=True,  # modelde 'successful' olarak tanımlı
             timestamp=now()
         )
 
@@ -61,13 +63,43 @@ class CustomLoginView(LoginView):
 def profile_view(request):
     return render(request, 'account/profile.html', {'user': request.user})
 
-# Eklenmesi gereken: davranış analizi view'i
+# Eklenen: davranış analizi view'i (mevcut yapıya eklendi, bozulmadan)
 @login_required
 def behavior_analysis_view(request):
     ip = request.META.get('REMOTE_ADDR')
     login_attempts = LoginAttempt.objects.filter(ip_address=ip).order_by('-timestamp')[:20]
 
-    return render(request, 'account/behavior_analysis.html', {
+    # Son 30 gün içindeki giriş saatlerinin dağılımı
+    login_hours = (
+        LoginAttempt.objects
+        .filter(ip_address=ip, timestamp__gte=timezone.now() - timezone.timedelta(days=30))
+        .annotate(hour=ExtractHour('timestamp'))
+        .values('hour')
+        .annotate(count=Count('id'))
+        .order_by('-count')
+    )
+
+    # Son 30 gündeki en çok kullanılan IP'ler (genel)
+    top_ips = (
+        LoginAttempt.objects
+        .filter(timestamp__gte=timezone.now() - timezone.timedelta(days=30))
+        .values('ip_address')
+        .annotate(count=Count('id'))
+        .order_by('-count')[:5]
+    )
+
+    current_hour = timezone.now().hour
+    typical_hour = login_hours[0]['hour'] if login_hours else None
+    unusual_time = typical_hour is not None and abs(current_hour - typical_hour) > 3
+
+    context = {
         'attempts': login_attempts,
         'ip': ip,
-    })
+        'login_hours': login_hours,
+        'top_ips': top_ips,
+        'current_hour': current_hour,
+        'typical_hour': typical_hour,
+        'unusual_time': unusual_time,
+    }
+
+    return render(request, 'account/behavior_analysis.html', context)
