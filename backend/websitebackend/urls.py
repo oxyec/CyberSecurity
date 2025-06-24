@@ -23,7 +23,7 @@ from blog.views import blog_list
 from account.views import main
 
 from django.urls import path
-from .views import clear_cache
+#from .views import clear_cache
 
 
 def home_view(_):
@@ -39,9 +39,11 @@ urlpatterns = [
     path('main/', main , name='logout'),
     path('', home_view, name='home'),
     path("__reload__/", include("django_browser_reload.urls")),
+    path('account/', include('account.urls')),
+    path('blog/', include('blog.urls')),
 ]
 
 
-urlpatterns += [
-    path('clear-cache/', clear_cache, name='clear_cache'),
-]
+#urlpatterns += [
+    #path('clear-cache/', clear_cache, name='clear_cache'),
+#]
