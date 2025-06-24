@@ -19,7 +19,7 @@ from django.urls import include, path
 from django.contrib.auth import views as auth_views
 from django.http import HttpResponse
 
-from blog.views import blog_list
+from blog.views import blog_list, post_create
 from account.views import main
 
 from django.urls import path
@@ -31,13 +31,22 @@ def home_view(_):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< Updated upstream
     path('login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/passwordreset.html'), name='password_reset'),
     path("account/", include("django.contrib.auth.urls")),
+=======
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/password_reset/', auth_views.PasswordResetView.as_view(template_name='account/passwordreset.html'), name='password_reset'),
+    path('accounts/password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='account/passwordresetdone.html'), name='password_reset_done'),
+    #path("accounts/", include("django.contrib.auth.urls")),
+>>>>>>> Stashed changes
     path('blog_list/', blog_list , name='logout'),
     path('main/', main , name='logout'),
     path('', home_view, name='home'),
+    path('new/', post_create, name='post_create'),
     path("__reload__/", include("django_browser_reload.urls")),
     path('account/', include('account.urls')),
     path('blog/', include('blog.urls')),

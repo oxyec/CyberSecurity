@@ -14,16 +14,18 @@
 
   <div class="flex items-center justify-center min-h-screen">
     <div class="login-container w-full max-w-md mx-auto">
-      <form method="post" class="mt-8 bg-gray-700 rounded-lg shadow-xl flex flex-col p-6">
-        {% csrf_token %}
+       <form method="post" class="max-w-md mx-auto mt-8 bg-gray-700 rounded-lg shadow-xl flex flex-col">
         <div class="bg-gray-800 w-full p-6 mb-4 rounded-t-lg flex items-center">
-          <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-24 w-auto max-w-[8rem] object-contain" />
-          <div class="ml-6 text-white">
-            <h2 class="text-md">İzmir Ekonomi Üniversitesi</h2>
-            <h2 class="text-2xl font-semibold">Siber Güvenlik Kulübü</h2>
-          </div>
+        <div class="flex items-center justify-start ml-2">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-24 w-auto max-w-[8rem] object-contain">
         </div>
-
+        <div class="flex flex-col justify-center ml-6 w-full">
+          <h2 class="text-white text-md text-left w-full">İzmir Ekonomi Üniversitesi</h2>
+          <h2 class="text-white text-2xl text-left w-full">Siber Güvenlik Kulubü</h2>
+        </div>
+      </div>
+      {% csrf_token %}
+      <div class="px-6 pb-6">
         <div class="mb-4">
           <label for="{{ form.username.id_for_label }}" class="block text-gray-300 text-sm font-bold mb-2">
             E-Posta / Kullanıcı Adı
@@ -39,21 +41,23 @@
         </div>
 
         <!-- Mesajlar burada gösterilecek -->
-        {% if messages %}
-          <div class="mb-4">
-            {% for message in messages %}
-              <p class="text-red-500 font-semibold">{{ message }}</p>
-            {% endfor %}
-          </div>
-        {% endif %}
+       
+            {% if form.errors.password %}
+              <p class="text-red-500 font-semibold">Şifre yanlış. Lütfen tekrar deneyin.</p>
+            {% endif %}
+            {% if form.non_field_errors %}
+              <p class="text-red-500 font-semibold">Kullanıcı adı veya şifre yanlış. Lütfen tekrar deneyin.</p>
+            {% endif %}
+        
 
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded focus:outline-none focus:shadow-outline px-3">
           Giriş Yap
         </button>
 
         <a href="{% url 'password_reset' %}" class="block mt-4 text-blue-400 hover:text-blue-600 text-sm font-semibold">
           Kayıt Ol / Şifremi Unuttum
         </a>
+        </div>
       </form>
     </div>
   </div>

@@ -1,9 +1,15 @@
+{% load static tailwind_tags %}
+{% load static %}
+{% load widget_tweaks %}
+
 <!DOCTYPE html>
 <html>
 <head>
+    {% tailwind_css %}
     <title>Blog</title>
 </head>
 <body>
+    {% include 'mainpage/navbar.html' %}
     <h1>Blog Yazıları</h1>
     {% for post in posts %}
         <div>
