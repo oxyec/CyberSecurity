@@ -1,16 +1,45 @@
-<h1>Güvenlik Bülteni</h1>
+{% load static tailwind_tags %}
+{% load static %}
+{% load widget_tweaks %}
 
-<form method="get" style="margin-bottom: 20px;">
-  <input type="text" name="q" placeholder="Başlık veya içerikte ara..." value="{{ query|default_if_none:'' }}">
-  <button type="submit">Ara</button>
+{% load static tailwind_tags %}
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% tailwind_css %}
+    <title>Blog</title>
+</head>
+<body>
+    {% include 'mainpage/navbar.html' %}
+    <h1 class="text-2xl font-bold mb-4">Güvenlik Bülteni</h1>
+
+<form method="get" class="mb-5 flex gap-2">
+    <input
+        type="text"
+        name="q"
+        placeholder="Başlık veya içerikte ara..."
+        value="{{ query|default_if_none:'' }}"
+        class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full"
+    >
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Ara</button>
 </form>
 
 {% for b in bulletins %}
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-        <h2><a href="{% url 'bulletin_detail' b.pk %}">{{ b.title }}</a></h2>
-        <p>{{ b.content|linebreaks }}</p>
-        <small>{{ b.published_at|date:"d M Y H:i" }}</small>
-    </div>
+        <div class="border border-gray-300 rounded p-4 mb-4 shadow-sm bg-white">
+                <h2 class="text-xl font-semibold mb-2">
+                        <a href="{% url 'bulletin_detail' b.pk %}" class="text-blue-700 hover:underline">{{ b.title }}</a>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 3h7m0 0v7m0-7L10 14m-7 7h7a2 2 0 002-2v-7"/>
+                            </svg>
+                </h2>
+                <p class="mb-3 text-gray-800">{{ b.content|linebreaks }}</p>
+                <small class="text-gray-500">{{ b.published_at|date:"d M Y H:i" }}</small>
+        </div>
 {% empty %}
-    <p>Henüz haber eklenmedi.</p>
+        <p class="text-gray-600">Henüz haber eklenmedi.</p>
 {% endfor %}
+</body>
+</html>

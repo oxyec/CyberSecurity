@@ -203,3 +203,4 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 *.pyc
+*.pyc
