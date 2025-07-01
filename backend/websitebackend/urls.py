@@ -47,6 +47,8 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     #path('account/', include('account.urls')),
     path('blog/', include('blog.urls')),
+    path('users/<str:username>/', main, name='user_profile'),
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 

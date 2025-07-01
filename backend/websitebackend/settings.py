@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'tailwind', # For live reloading during development
     'widget_tweaks', 
     'theme', # For form tweaks in templates
+    'tinymce',  # For rich text editing
 ]
 
 MIDDLEWARE = [
