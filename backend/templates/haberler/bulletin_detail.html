@@ -1,5 +1,15 @@
 <h1>{{ bulletin.title }}</h1>
 
+{% if bulletin.image_url %}
+    <p>
+        <img src="{{ bulletin.image_url }}" alt="{{ bulletin.title }}" style="max-width: 600px; height: auto; border-radius: 8px;">
+    </p>
+{% endif %}
+
+{% if bulletin.author %}
+    <p><strong>Yazar:</strong> {{ bulletin.author }}</p>
+{% endif %}
+
 <p>{{ bulletin.content|linebreaks }}</p>
 
 <small>Yayınlanma Tarihi: {{ bulletin.published_at|date:"d M Y H:i" }}</small>
