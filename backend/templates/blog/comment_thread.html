@@ -1,0 +1,26 @@
+<div class="mb-4 border-l-4 border-blue-200 pl-4">
+    <div class="flex items-center text-sm text-gray-700 mb-1">
+        <span class="font-semibold">
+            {% if comment.author %}
+                <a href="{% url 'user_profile' comment.author.username %}" class="text-blue-700 hover:underline">
+                    {{ comment.author.username }}
+                </a>
+            {% else %}
+                (Bilinmiyor)
+            {% endif %}
+        </span>
+        <span class="ml-2 text-gray-400">{{ comment.created_at|date:"d M Y H:i" }}</span>
+    </div>
+    <div class="mb-2 text-gray-800">{{ comment.content|safe }}</div>
+    {% if user.is_authenticated %}
+        <form method="post" class="mb-2">
+            {% csrf_token %}
+            <textarea name="content" rows="2" class="w-full rounded border-gray-300 mb-2" placeholder="Yanıtla..."></textarea>
+            <input type="hidden" name="parent_id" value="{{ comment.id }}">
+            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600">Yanıtla</button>
+        </form>
+    {% endif %}
+    {% for reply in comment.replies.all %}
+        {% include "blog/comment_thread.html" with comment=reply %}
+    {% endfor %}
+</div>

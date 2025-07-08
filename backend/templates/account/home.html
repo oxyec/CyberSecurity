@@ -1,0 +1,15 @@
+{% load static tailwind_tags %}
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    {% tailwind_css %}
+    <title>Ana sayfa</title>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-blue-100 min-h-screen font-sans">
+    {% include 'mainpage/navbar.html' %}
+    <h1>Siber güvenlik kulübüne hoş geldiniz!</h1>
+</body>
+</html>

@@ -1,5 +1,5 @@
 from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.cache import cache
@@ -11,12 +11,19 @@ from django.utils import timezone
 import time
 
 from account.models import LoginAttempt  # Bu model daha önce eklendiğini varsayıyoruz
+from django.contrib.auth import get_user_model
+from blog.models import Post, Comment
 
 def main(request):
     return HttpResponse("Hello from main view!")
 
 class CustomLoginView(LoginView):
     template_name = 'account/login.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/')
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         ip = self.request.META.get('REMOTE_ADDR')
@@ -60,8 +67,26 @@ class CustomLoginView(LoginView):
         return super().form_invalid(form)
 
 @login_required
-def profile_view(request):
-    return render(request, 'account/profile.html', {'user': request.user})
+def profile_view(request, username=None):
+    User = get_user_model()
+    if username is None:
+        user_obj = request.user
+    else:
+        user_obj = get_object_or_404(User, username=username)
+    posts = Post.objects.filter(author=user_obj)
+    comments = Comment.objects.filter(author=user_obj)
+    profile = getattr(user_obj, 'userprofile', None)
+    return render(request, 'account/profile.html', {
+        'profile_user': user_obj,
+        'profile': profile,
+        'posts': posts,
+        'comments': comments,
+    })
+
+@login_required
+def home(request):
+    return render(request, 'account/home.html')
+   
 
 # Eklenen: davranış analizi view'i (mevcut yapıya eklendi, bozulmadan)
 @login_required

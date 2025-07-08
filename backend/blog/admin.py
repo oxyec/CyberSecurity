@@ -1,8 +1,5 @@
 from django.contrib import admin
+from .models import Post, Comment
 
-try:
-	from .models import Post
-	admin.site.register(Post)
-except ImportError:
-	# Post model does not exist; handle or log the error as needed
-	pass
+admin.site.register(Post)
+admin.site.register(Comment)

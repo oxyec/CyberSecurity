@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta http-equiv="refresh" content="2;url=/login/" />
+    <title>Çıkış Yapıldı</title>
+    <style>
+        body { display: flex; align-items: center; justify-content: center; height: 100vh; background: #f3f4f6; font-family: sans-serif; }
+        .box { background: white; padding: 2rem 3rem; border-radius: 1rem; box-shadow: 0 2px 8px #0001; text-align: center; }
+    </style>
+    <script>
+        let seconds = 2;
+        function updateCountdown() {
+            if (seconds > 0) {
+                document.getElementById('countdown').textContent = seconds;
+                seconds--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        window.onload = updateCountdown;
+    </script>
+</head>
+<body>
+    <div class="box">
+        <h1>Oturumunuz Sonlandı</h1>
+        <p>Oturumunuz zaman aşımına uğradı veya çıkış yaptınız.<br>
+        <span id="countdown">2</span> saniye içinde giriş sayfasına yönlendirileceksiniz.</p>
+        <p><a href="/login/">Hemen giriş yap</a></p>
+    </div>
+</body>
+</html>

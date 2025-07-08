@@ -20,6 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('haberler/', include('haberler.urls')),
     path('admin/', admin.site.urls),
-    path('account/', include('account.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('blog/', include('blog.urls')),  # Bunu ekle
+    path('users/', include('account.urls')),
 ]
