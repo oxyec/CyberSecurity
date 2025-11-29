@@ -1,66 +1,41 @@
 from django.core.management.base import BaseCommand
 from haberler.models import Bulletin
-
-from datetime import datetime
-from cybernews.cybernews import CyberNews
-
+from haberler.utils.news_fetcher import NewsFetcher
+from django.utils import timezone
 
 class Command(BaseCommand):
-    help = 'CyberNews ile tüm kategorilerden haberleri çeker ve Bulletin tablosuna kaydeder (görsel, yazar, tarih dahil)'
+    help = 'Fetches cybersecurity news from RSS feeds and saves to Bulletin model'
 
     def handle(self, *args, **kwargs):
-        cn = CyberNews()
+        fetcher = NewsFetcher()
+        news_items = fetcher.fetch_all()
 
-        categories = [
-            "general", "dataBreach", "cyberAttack", "vulnerability", "malware",
-            "security", "cloud", "tech", "iot", "bigData",
-            "business", "mobility", "research", "corporate", "socialMedia"
-        ]
+        self.stdout.write(f"Fetched {len(news_items)} items total. Processing...")
 
-        all_news = []
-
-        for category in categories:
-            try:
-                news_list = cn.get_news(category)
-                all_news.extend(news_list)
-                self.stdout.write(self.style.SUCCESS(f"{category} kategorisinden {len(news_list)} haber çekildi."))
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"{category} kategorisinden haber çekilirken hata: {e}"))
-
-        self.stdout.write(f"Toplam {len(all_news)} haber çekildi.")
-
-        for item in all_news:
-            title = item.get('title') or item.get('headline') or 'Başlıksız Haber'
-            # Link için farklı olasılıkları kontrol ediyoruz
-            link = (
-                item.get('link') or 
-                item.get('url') or 
-                item.get('newsURL') or 
-                item.get('news_url') or 
-                item.get('article_url')
-            )
-            content = item.get('summary') or item.get('full_text') or ''
-            image_url = item.get('image') or item.get('image_url') or ''
-            author = item.get('author') or ''
-
-            published_str = item.get('date') or item.get('published_at') or None
-            if published_str:
+        added_count = 0
+        for item in news_items:
+            # Check if exists (by link)
+            if not Bulletin.objects.filter(link=item['link']).exists():
                 try:
-                    published = datetime.fromisoformat(published_str)
-                except Exception:
-                    published = datetime.now()
-            else:
-                published = datetime.now()
+                    # Make aware if naive
+                    pub_date = item['published_at']
+                    if timezone.is_naive(pub_date):
+                        pub_date = timezone.make_aware(pub_date)
 
-            if link and not Bulletin.objects.filter(link=link).exists():
-                Bulletin.objects.create(
-                    title=title,
-                    content=content + f"\n\nKaynak: {link}",
-                    link=link,
-                    published_at=published,
-                    image_url=image_url,
-                    author=author
-                )
-                self.stdout.write(self.style.SUCCESS(f"✓ Eklendi: {title}"))
+                    Bulletin.objects.create(
+                        title=item['title'],
+                        content=item['content'],
+                        link=item['link'],
+                        published_at=pub_date,
+                        image_url=item['image_url'],
+                        author=item['author']
+                    )
+                    added_count += 1
+                    self.stdout.write(self.style.SUCCESS(f"+ Added: {item['title']}"))
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(f"Error saving {item['title']}: {e}"))
             else:
-                self.stdout.write(f"- Zaten var veya link yok: {title}")
+                # self.stdout.write(f". Skipped (exists): {item['title']}")
+                pass
+
+        self.stdout.write(self.style.SUCCESS(f"Successfully added {added_count} new bulletins."))

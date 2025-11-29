@@ -8,63 +8,106 @@
 <body class="bg-gradient-to-br from-gray-100 to-blue-100 min-h-screen font-sans">
     {% include 'mainpage/navbar.html' %}
     <div class="container mx-auto px-4 py-10">
-        <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl mx-auto mb-8">
-            <div class="flex items-center mb-4">
-                {% if profile and profile.profile_picture %}
-                    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-20 h-20 rounded-full mr-4 object-cover">
-                {% endif %}
-                <div>
-                    <h1 class="text-2xl font-bold text-blue-700">{{ profile_user.get_full_name|default:profile_user.username }}</h1>
-                    <p class="text-gray-600">@{{ profile_user.username }}</p>
-                    {% if profile and profile.bio %}
-                        <p class="mt-2 text-gray-700">{{ profile.bio }}</p>
-                    {% endif %}
-                    {% if profile and profile.location %}
-                        <p class="text-sm text-gray-500">Konum: {{ profile.location }}</p>
-                    {% endif %}
-                    {% if profile and profile.website %}
-                        <p class="text-sm text-blue-600"><a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></p>
+
+        <!-- Profil Kartı -->
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto mb-8 relative overflow-hidden">
+             <!-- Arkaplan Dekoru -->
+            <div class="absolute top-0 left-0 w-full h-24 bg-blue-700"></div>
+
+            <div class="relative flex flex-col sm:flex-row items-center sm:items-end -mt-12 sm:mt-0 pt-12 sm:pt-24 px-4">
+                <div class="relative">
+                    {% if profile and profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="{{ profile_user.username }}" class="w-32 h-32 rounded-full border-4 border-white shadow-md object-cover">
+                    {% else %}
+                        <div class="w-32 h-32 rounded-full border-4 border-white shadow-md bg-gray-200 flex items-center justify-center text-gray-500 text-4xl font-bold">
+                            {{ profile_user.username|slice:":1"|upper }}
+                        </div>
                     {% endif %}
                 </div>
-            </div>
-            <div class="text-sm text-gray-500 mb-2">
-                Üye Oldu: {{ profile_user.date_joined|date:"d M Y" }}
-            </div>
-        </div>
 
-        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 mb-8">
-            <h2 class="text-xl font-semibold mb-4">Blog Yazıları</h2>
-            {% if posts %}
-                <ul class="space-y-4">
-                    {% for post in posts %}
-                        <li>
-                            <a href="{% url 'post_detail' post.pk %}" class="text-blue-700 hover:underline font-semibold">{{ post.title }}</a>
-                            <span class="text-gray-500 text-xs ml-2">{{ post.created_at|date:"d M Y H:i" }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <div class="text-gray-500">Henüz blog yazısı yok.</div>
+                <div class="mt-4 sm:mt-0 sm:ml-6 text-center sm:text-left flex-grow">
+                    <h1 class="text-3xl font-bold text-gray-900">{{ profile_user.get_full_name|default:profile_user.username }}</h1>
+                    <p class="text-gray-600 font-medium">@{{ profile_user.username }}</p>
+
+                    <div class="flex flex-wrap justify-center sm:justify-start gap-4 mt-2 text-sm text-gray-500">
+                        {% if profile and profile.location %}
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                {{ profile.location }}
+                            </span>
+                        {% endif %}
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            Katılım: {{ profile_user.date_joined|date:"d M Y" }}
+                        </span>
+                    </div>
+
+                    {% if profile and profile.website %}
+                         <a href="{{ profile.website }}" target="_blank" class="text-blue-600 hover:underline text-sm mt-1 block">
+                            {{ profile.website }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                <!-- Eğer kendi profili ise düzenle butonu eklenebilir (ilerde) -->
+                <!-- <div class="mt-4 sm:mt-0">
+                    <button class="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Profili Düzenle</button>
+                </div> -->
+            </div>
+
+            {% if profile and profile.bio %}
+                <div class="mt-6 border-t pt-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Hakkında</h3>
+                    <p class="text-gray-700 leading-relaxed">{{ profile.bio }}</p>
+                </div>
             {% endif %}
         </div>
 
-        <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-xl font-semibold mb-4">Yorumlar</h2>
-            {% if comments %}
-                <ul class="space-y-4">
-                    {% for comment in comments %}
-                        <li>
-                            <div class="text-gray-800">{{ comment.content|safe }}</div>
-                            <div class="text-xs text-gray-500">
-                                <a href="{% url 'post_detail' comment.post.pk %}" class="text-blue-700 hover:underline">{{ comment.post.title }}</a>
-                                | {{ comment.created_at|date:"d M Y H:i" }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <div class="text-gray-500">Henüz yorum yok.</div>
-            {% endif %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <!-- Blog Yazıları -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                    Son Yazıları
+                </h2>
+                {% if posts %}
+                    <ul class="space-y-3">
+                        {% for post in posts %}
+                            <li class="group">
+                                <a href="{% url 'post_detail' post.pk %}" class="block">
+                                    <span class="font-semibold text-gray-800 group-hover:text-blue-700 transition">{{ post.title }}</span>
+                                    <span class="text-gray-500 text-xs block">{{ post.created_at|date:"d M Y" }}</span>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500 italic">Henüz blog yazısı yok.</p>
+                {% endif %}
+            </div>
+
+            <!-- Yorumlar -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                 <h2 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    Son Yorumları
+                </h2>
+                {% if comments %}
+                    <ul class="space-y-4">
+                        {% for comment in comments %}
+                            <li class="bg-gray-50 p-3 rounded-lg">
+                                <p class="text-gray-800 text-sm mb-1">"{{ comment.content|striptags|truncatechars:80 }}"</p>
+                                <div class="text-xs text-gray-500 flex justify-between">
+                                    <a href="{% url 'post_detail' comment.post.pk %}" class="text-blue-600 hover:underline truncate w-2/3">{{ comment.post.title }}</a>
+                                    <span>{{ comment.created_at|date:"d M" }}</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500 italic">Henüz yorum yok.</p>
+                {% endif %}
+            </div>
         </div>
     </div>
 </body>
