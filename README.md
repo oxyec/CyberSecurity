@@ -19,7 +19,7 @@ This repository contains a Django backend and a React frontend.
 
 2.  Install dependencies (if you haven't already):
     ```bash
-    pip install django django-sslserver django-widget-tweaks django-tailwind django-tinymce argon2-cffi bcrypt bleach django-browser-reload Pillow feedparser requests
+    pip install django django-sslserver django-widget-tweaks django-tailwind django-tinymce argon2-cffi bcrypt bleach django-browser-reload Pillow
     ```
 
 3.  Apply database migrations:
@@ -27,13 +27,7 @@ This repository contains a Django backend and a React frontend.
     python manage.py migrate
     ```
 
-4.  **Fetch Latest News** (Optional but recommended):
-    ```bash
-    python manage.py fetch_news
-    ```
-    This command scrapes the latest cybersecurity news from various RSS feeds and populates the database.
-
-5.  Start the development server:
+4.  Start the development server:
     ```bash
     python manage.py runserver
     ```
