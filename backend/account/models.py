@@ -21,6 +21,9 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"Profile of {self.user.username}"
+
 class UserSettings(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     receive_newsletter = models.BooleanField(default=False)
@@ -59,9 +62,6 @@ class UserSettingsAdmin(admin.ModelAdmin):
     readonly_fields = ()
     list_display = ('user', 'receive_newsletter', 'dark_mode')
     list_filter = ('receive_newsletter', 'dark_mode')
-
-def __str__(self):
-    return f"Profile of {self.user.username}"
 
 @admin.register(UserActivity)
 class UserActivityAdmin(admin.ModelAdmin):

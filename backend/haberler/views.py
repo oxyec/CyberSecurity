@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .models import Bulletin
 
+
 def bulletin_list(request):
-    query = request.GET.get('q')  # Arama kutusundaki kelimeyi al
-    bulletins = Bulletin.objects.order_by('-published_at')  # Yeni haberi en önce göster
+    query = request.GET.get('q')
+    bulletins = Bulletin.objects.order_by('-published_at')
 
     if query:
         bulletins = bulletins.filter(
@@ -13,10 +14,12 @@ def bulletin_list(request):
 
     return render(request, 'haberler/bulletin_list.html', {
         'bulletins': bulletins,
-        'query': query,  # HTML'de inputta göstermek için
+        'query': query,
     })
+
+
 def bulletin_detail(request, pk):
-    bulletin = Bulletin.objects.get(pk=pk)
+    bulletin = get_object_or_404(Bulletin, pk=pk)
     return render(request, 'haberler/bulletin_detail.html', {
         'bulletin': bulletin,
     })
