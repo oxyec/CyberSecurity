@@ -105,22 +105,24 @@ def home(request):
 @login_required
 def behavior_analysis_view(request):
     ip = request.META.get('REMOTE_ADDR')
-    login_attempts = LoginAttempt.objects.filter(ip_address=ip).order_by('-timestamp')[:20]
+    # Filter by username to show user's own activity, not global or shared IP activity
+    username = request.user.username
+    login_attempts = LoginAttempt.objects.filter(username=username).order_by('-timestamp')[:20]
 
     # Son 30 gün içindeki giriş saatlerinin dağılımı
     login_hours = (
         LoginAttempt.objects
-        .filter(ip_address=ip, timestamp__gte=timezone.now() - timezone.timedelta(days=30))
+        .filter(username=username, timestamp__gte=timezone.now() - timezone.timedelta(days=30))
         .annotate(hour=ExtractHour('timestamp'))
         .values('hour')
         .annotate(count=Count('id'))
         .order_by('-count')
     )
 
-    # Son 30 gündeki en çok kullanılan IP'ler (genel)
+    # Son 30 gündeki en çok kullanılan IP'ler (kullanıcı bazlı)
     top_ips = (
         LoginAttempt.objects
-        .filter(timestamp__gte=timezone.now() - timezone.timedelta(days=30))
+        .filter(username=username, timestamp__gte=timezone.now() - timezone.timedelta(days=30))
         .values('ip_address')
         .annotate(count=Count('id'))
         .order_by('-count')[:5]
