@@ -15,11 +15,13 @@ ALLOWED_ATTRIBUTES = {
 }
 
 def blog_list(request):
-    posts = Post.objects.all().order_by('-created_at')
+    # Optimize: Fetch authors with posts to avoid N+1 query problem
+    posts = Post.objects.select_related('author').all().order_by('-created_at')
     return render(request, 'blog/blog_list.html', {'posts': posts})
 
 def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+    # Optimize: Fetch author with post
+    post = get_object_or_404(Post.objects.select_related('author'), pk=pk)
     comments = post.comments.filter(parent__isnull=True)
     comment_form = CommentForm()
     if request.method == 'POST' and request.user.is_authenticated:
