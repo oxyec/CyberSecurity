@@ -1,4 +1,4 @@
-# CyberSecurity Platform (BECAUSE OF OTHER PROJECTS THİS PROJECT İS NO LONGER GETTİNG DEVELOPED)
+# CyberSecurity Platform (BECAUSE OF OTHER PROJECTS THİS PROJECT İS NO LONGER GETTİNG DEVELOPED and because of that ı use ai to warp it up as you can see at commits)
 
 A Django + React web application for aggregating cybersecurity news, blogging, and user behavior analysis.
 
