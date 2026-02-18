@@ -1,0 +1,36 @@
+name: Security Check
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodu Çek (Checkout)
+        uses: actions/checkout@v3
+
+      - name: Python Kurulumu
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Güvenlik Araçlarını Yükle
+        run: |
+          pip install --upgrade pip
+          pip install bandit safety
+
+      - name: Bandit ile Kod Analizi (SAST)
+        run: |
+          # backend klasörünü tarar
+          bandit -r backend/ -ll
+
+      - name: Safety ile Kütüphane Kontrolü
+        continue-on-error: true
+        run: |
+          # backend/requirements.txt dosyasını kontrol eder
+          safety check -r backend/requirements.txt

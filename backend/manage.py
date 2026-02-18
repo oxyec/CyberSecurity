@@ -2,7 +2,8 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from dotenv import load_dotenv
+load_dotenv()
 sys.path.append(os.path.join(os.path.dirname(__file__), 'backend'))
 def main():
     """Run administrative tasks."""
