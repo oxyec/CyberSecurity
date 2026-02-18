@@ -1,5 +1,5 @@
-# CyberSecurity Platform (BECAUSE OF OTHER PROJECTS THİS PROJECT İS NO LONGER GETTİNG DEVELOPED and because of that ı use ai to warp it up as you can see at commits)
-
+# CyberSecurity Platform 
+# ("This project is currently archived. To bring the project to a functional state for demonstration purposes, some recent modules were completed with the assistance of AI tools.")
 A Django + React web application for aggregating cybersecurity news, blogging, and user behavior analysis.
 
 > **Status:** Work in progress
