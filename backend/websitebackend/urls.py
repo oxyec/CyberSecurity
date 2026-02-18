@@ -4,12 +4,12 @@ from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
 from blog.views import blog_list, post_create
-from account.views import main, profile_view, home
+from account.views import main, profile_view, home, CustomLoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('haberler/', include('haberler.urls')),
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='login'),
+    path('accounts/login/', CustomLoginView.as_view(template_name='account/login.html'), name='login'),
     path('accounts/logout/', auth_views.LogoutView.as_view(template_name='account/logged_out.html'), name='logout'),
     path('accounts/password_reset/', auth_views.PasswordResetView.as_view(template_name='account/passwordreset.html'), name='password_reset'),
     path('accounts/password_reset_done/', auth_views.PasswordResetDoneView.as_view(template_name='account/passwordresetdone.html'), name='password_reset_done'),

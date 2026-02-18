@@ -23,6 +23,19 @@ class CustomLoginView(LoginView):
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect('/')
+
+        if request.method == 'POST':
+            ip = request.META.get('REMOTE_ADDR')
+            key = f'login_failures_{ip}'
+            failures = cache.get(key, [])
+            current_time = time.time()
+            # Clean old failures (filter only recent ones)
+            failures = [t for t in failures if current_time - t < 300]
+
+            if len(failures) >= 5:
+                messages.error(request, "Çok fazla başarısız giriş denemesi tespit edildi. Lütfen 5 dakika sonra tekrar deneyin.")
+                return redirect('login')
+
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
