@@ -1,4 +1,4 @@
-# CyberSecurity Platform
+# CyberSecurity Platform (BECAUSE OF OTHER PROJECTS THİS PROJECT İS NO LONGER GETTİNG DEVELOPED)
 
 A Django + React web application for aggregating cybersecurity news, blogging, and user behavior analysis.
 
@@ -101,6 +101,9 @@ All configuration is done through environment variables. See `backend/.env.examp
 | `ALLOWED_HOSTS` | No | `localhost,127.0.0.1` | Comma-separated allowed hosts |
 | `DATABASE_ENGINE` | No | `sqlite3` | Database backend |
 | `DATABASE_NAME` | No | `db.sqlite3` | Database name |
+
+
+
 
 ## License
 
